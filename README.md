@@ -186,3 +186,5 @@ churn-mlops/
    ├─ ci.yml                     test on every push
    └─ retrain.yml                retrain weekly
 ```
+**Live app:** https://telecom-churn-mlops.streamlit.app/
+**API docs:** https://telecom-churn-mlops-yjt1.onrender.com/docs
