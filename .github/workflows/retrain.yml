@@ -1,0 +1,39 @@
+# CD / auto-retrain: retrain the model every week (or on demand) and commit the
+# new model.pkl. The push to main then triggers the deploy (Render auto-deploys).
+name: Retrain
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"       # every Monday 03:00 UTC
+  workflow_dispatch: {}        # ...or run it manually from the Actions tab
+
+permissions:
+  contents: write              # required so the job can push model.pkl back
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Retrain
+        run: python src/train.py
+
+      - name: Quality gate before shipping the new model
+        run: pytest -v
+
+      - name: Commit the new model if it changed
+        run: |
+          git config user.name  "github-actions"
+          git config user.email "actions@github.com"
+          git add models/model.pkl
+          git commit -m "chore: weekly model retrain" || echo "no change"
+          git push

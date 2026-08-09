@@ -1,0 +1,13 @@
+# scikit-learn is pinned exactly: model.pkl is unpickled by the API and the
+# dashboard, and a different minor version can refuse to load it.
+scikit-learn==1.8.0
+pandas==2.3.3
+numpy==2.4.4
+joblib==1.5.3
+mlflow==3.15.1
+fastapi==0.141.1
+uvicorn[standard]==0.52.1
+pydantic==2.13.4
+streamlit==1.61.1
+requests==2.33.1
+pytest==9.1.1
